@@ -61,3 +61,23 @@ Sensor.create(name: "Hybrid battery pack remaining life", shortname: "hybrid_bat
 Sensor.create(name: "Engine oil temperature", shortname: "oil_temp", unit: "C")
 Sensor.create(name: "Fuel injection timing", shortname: "fuel_inject_timing", unit: "degrees")
 Sensor.create(name: "Engine fuel rate", shortname: "fuel_rate", unit: "L/h")
+
+# Seeding users
+dan = User.create(email: "dan@example.com", password: "password", password_confirmation: "password")
+paul = User.create(email: "paul@example.com", password: "password", password_confirmation: "password")
+
+# Seeding devices
+Device.create(device_name: "TEST_123", user: dan)
+Device.create(device_name: "TEST_789", user: paul)
+
+# Seeding reports for dan
+rep = Report.create(device: dan.device, time_reported: Time.now)
+
+Reading.create(sensor: Sensor.find_by_shortname("fuel_level"), value: "40", report: rep)
+Reading.create(sensor: Sensor.find_by_shortname("control_module_voltage"), value: "12.5", report: rep)
+
+# Seeding reports for paul
+rep = Report.create(device: paul.device, time_reported: Time.now)
+
+Reading.create(sensor: Sensor.find_by_shortname("fuel_level"), value: "60", report: rep)
+Reading.create(sensor: Sensor.find_by_shortname("control_module_voltage"), value: "12.1", report: rep)

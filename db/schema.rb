@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180429221849) do
+ActiveRecord::Schema.define(version: 20180430112046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,11 +19,13 @@ ActiveRecord::Schema.define(version: 20180429221849) do
     t.string "device_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["device_name"], name: "index_devices_on_device_name", unique: true
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "readings", force: :cascade do |t|
-    t.decimal "value", null: false
+    t.string "value", null: false
     t.bigint "sensor_id"
     t.bigint "report_id"
     t.datetime "created_at", null: false
@@ -67,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180429221849) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "devices", "users"
   add_foreign_key "readings", "reports"
   add_foreign_key "readings", "sensors"
   add_foreign_key "reports", "devices"

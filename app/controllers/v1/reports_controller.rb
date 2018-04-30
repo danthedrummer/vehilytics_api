@@ -1,7 +1,17 @@
 class V1::ReportsController < ApplicationController
   
+  # GET all reports for current user
+  # Intended for the client to use
+  def index
+    @reports = current_user.device.reports
+  end
+  
+  # Create a new report w/ readings for a given device
+  # Intended for the diagnostic reader to use
   def create 
-    if current_user == nil
+    
+    # If the client tries to access this endpoint, return unauthorized
+    if current_user != nil
       head(:unauthorized)
       return
     end
