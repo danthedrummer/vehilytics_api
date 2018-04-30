@@ -1,4 +1,4 @@
-class V1::SessionsController < ApplicationController
+class V1::UserSessionsController < ApplicationController
   
   # Checking that the current token is valid
   def show

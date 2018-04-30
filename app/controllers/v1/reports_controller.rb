@@ -3,6 +3,11 @@ class V1::ReportsController < ApplicationController
   # GET all reports for current user
   # Intended for the client to use
   def index
+    if current_user == nil
+      head(:unauthorized)
+      return 
+    end
+    
     @reports = current_user.device.reports
   end
   
@@ -10,15 +15,14 @@ class V1::ReportsController < ApplicationController
   # Intended for the diagnostic reader to use
   def create 
     
-    # If the client tries to access this endpoint, return unauthorized
-    if current_user != nil
+    if current_device == nil
       head(:unauthorized)
-      return
+      return 
     end
     
     @report = Report.new(report_params)
     puts @report
-    @report.device = Device.find_by_device_name(params[:device_name])
+    @report.device = current_device
     @report.save
     
     reading_params[:readings].each do |reading|

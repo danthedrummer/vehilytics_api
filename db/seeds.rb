@@ -67,8 +67,8 @@ dan = User.create(email: "dan@example.com", password: "password", password_confi
 paul = User.create(email: "paul@example.com", password: "password", password_confirmation: "password")
 
 # Seeding devices
-Device.create(device_name: "TEST_123", user: dan)
-Device.create(device_name: "TEST_789", user: paul)
+Device.create(email: "device_test_123@vehilytics.com", device_name: "TEST_123", user: dan, password: "device_pass", password_confirmation: "device_pass")
+Device.create(email: "device_test_789@vehilytics.com", device_name: "TEST_789", user: paul, password: "device_pass", password_confirmation: "device_pass")
 
 # Seeding reports for dan
 rep = Report.create(device: dan.device, time_reported: Time.now)
