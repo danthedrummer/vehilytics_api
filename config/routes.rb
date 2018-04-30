@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  namespace :v1 do
-    get '/sensors', to: 'sensors#index'
-    get '/sensors/:id', to: 'sensors#show'
-    
-    post '/reports', to: 'reports#create'
+  devise_for :users
+  namespace :v1, defaults: { format: :json } do
+    resource :sessions, only: [:create, :destroy] 
+    resources :sensors, only: [:index, :show]
+    resources :reports, only: [:create]
   end
 end

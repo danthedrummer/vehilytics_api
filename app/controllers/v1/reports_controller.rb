@@ -1,7 +1,11 @@
 class V1::ReportsController < ApplicationController
   
   def create 
-    puts report_params
+    if current_user == nil
+      head(:unauthorized)
+      return
+    end
+    
     @report = Report.new(report_params)
     puts @report
     @report.device = Device.find_by_device_name(params[:device_name])
@@ -19,7 +23,6 @@ class V1::ReportsController < ApplicationController
     @report.readings.each do |r|
       result[:readings] << {:sensor => r.sensor.shortname, :value => r.value}
     end
-    # render json: {:report => @report, :readings => { :sensor => @report.readings.sensor.shortname, :value => @report.readings } }, status: :created
     render json: result, status: :created
   end
   
