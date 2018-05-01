@@ -72,6 +72,10 @@ Device.create(email: "device_test_789@vehilytics.com", device_name: "TEST_789", 
 
 fuel_sensor = Sensor.find_by_shortname("fuel_level")
 battery_sensor = Sensor.find_by_shortname("control_module_voltage")
+air_temp_sensor = Sensor.find_by_shortname("ambient_air_temp")
+
+dan.sensors << fuel_sensor << battery_sensor
+paul.sensors << fuel_sensor << air_temp_sensor
 
 # Seeding reports for dan
 rep = Report.create(device: dan.device, time_reported: Time.now)
@@ -86,5 +90,5 @@ rep = Report.create(device: paul.device, time_reported: Time.now)
 
 Reading.create(sensor: fuel_sensor, value: "60", report: rep)
 paul.device.sensors << fuel_sensor
-Reading.create(sensor: battery_sensor, value: "12.1", report: rep)
-paul.device.sensors << battery_sensor
+Reading.create(sensor: air_temp_sensor, value: "9.3", report: rep)
+paul.device.sensors << air_temp_sensor

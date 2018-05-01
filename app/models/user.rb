@@ -6,4 +6,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
          
   has_one :device
+  has_and_belongs_to_many :sensors
 end

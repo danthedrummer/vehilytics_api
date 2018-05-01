@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501131114) do
+ActiveRecord::Schema.define(version: 20180501151312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,11 @@ ActiveRecord::Schema.define(version: 20180501131114) do
     t.string "unit", null: false
     t.index ["name"], name: "index_sensors_on_name", unique: true
     t.index ["shortname"], name: "index_sensors_on_shortname", unique: true
+  end
+
+  create_table "sensors_users", id: false, force: :cascade do |t|
+    t.bigint "sensor_id", null: false
+    t.bigint "user_id", null: false
   end
 
   create_table "users", force: :cascade do |t|
