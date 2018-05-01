@@ -21,7 +21,7 @@ class V1::ReadingsController < ApplicationController
     
     result = []
     retrieved_readings.each do |reading|
-      result << {:sensor => sensor.shortname, :value => reading.value, 
+      result << {:sensor => reading.sensor.shortname, :value => reading.value, 
         :time_reported => reading.report.time_reported}
     end
     

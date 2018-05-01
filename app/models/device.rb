@@ -7,4 +7,5 @@ class Device < ApplicationRecord
          
   belongs_to :user
   has_many :reports
+  has_and_belongs_to_many :sensors
 end

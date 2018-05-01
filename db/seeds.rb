@@ -70,14 +70,21 @@ paul = User.create(email: "paul@example.com", password: "password", password_con
 Device.create(email: "device_test_123@vehilytics.com", device_name: "TEST_123", user: dan, password: "device_pass", password_confirmation: "device_pass")
 Device.create(email: "device_test_789@vehilytics.com", device_name: "TEST_789", user: paul, password: "device_pass", password_confirmation: "device_pass")
 
+fuel_sensor = Sensor.find_by_shortname("fuel_level")
+battery_sensor = Sensor.find_by_shortname("control_module_voltage")
+
 # Seeding reports for dan
 rep = Report.create(device: dan.device, time_reported: Time.now)
 
-Reading.create(sensor: Sensor.find_by_shortname("fuel_level"), value: "40", report: rep)
-Reading.create(sensor: Sensor.find_by_shortname("control_module_voltage"), value: "12.5", report: rep)
+Reading.create(sensor: fuel_sensor, value: "40", report: rep)
+dan.device.sensors << fuel_sensor
+Reading.create(sensor: battery_sensor, value: "12.5", report: rep)
+dan.device.sensors << battery_sensor
 
 # Seeding reports for paul
 rep = Report.create(device: paul.device, time_reported: Time.now)
 
-Reading.create(sensor: Sensor.find_by_shortname("fuel_level"), value: "60", report: rep)
-Reading.create(sensor: Sensor.find_by_shortname("control_module_voltage"), value: "12.1", report: rep)
+Reading.create(sensor: fuel_sensor, value: "60", report: rep)
+paul.device.sensors << fuel_sensor
+Reading.create(sensor: battery_sensor, value: "12.1", report: rep)
+paul.device.sensors << battery_sensor
