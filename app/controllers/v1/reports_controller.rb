@@ -15,7 +15,7 @@ class V1::ReportsController < ApplicationController
   # Intended for the diagnostic reader to use
   def create 
     
-    if current_device == nil
+    if current_device == nil || current_device.user == nil
       head(:unauthorized)
       return 
     end

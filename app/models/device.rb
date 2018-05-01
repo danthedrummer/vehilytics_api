@@ -5,7 +5,7 @@ class Device < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
          
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :reports
   has_and_belongs_to_many :sensors
 end
