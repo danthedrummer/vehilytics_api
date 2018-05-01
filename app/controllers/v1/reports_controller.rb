@@ -29,6 +29,7 @@ class V1::ReportsController < ApplicationController
       r = Reading.new
       r.value = reading[:value]
       r.sensor = Sensor.find_by_shortname(reading[:shortname])
+      attach_sensor_to_device(r.sensor, current_device)
       r.report = @report
       r.save
     end
@@ -41,6 +42,12 @@ class V1::ReportsController < ApplicationController
   end
   
   private
+  
+    def attach_sensor_to_device sensor, device
+      if !device.sensors.include?(sensor)
+        device.sensors << sensor
+      end
+    end
   
     def report_params
       params.permit(:time_reported)
