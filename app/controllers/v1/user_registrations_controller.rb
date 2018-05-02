@@ -28,7 +28,7 @@ class V1::UserRegistrationsController < Devise::RegistrationsController
     new_user = User.new(email: email, password: password, password_confirmation: password_confirmation)
     if new_user.save
       @user = User.find_by_email(email.downcase)
-      render json: {:token => @user.authentication_token}, status: :ok
+      render json: {:token => @user.authentication_token}, status: :created
       return
     else
       render json: {:message => "New user not saved."}, status: 400
