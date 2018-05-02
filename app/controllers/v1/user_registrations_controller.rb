@@ -17,7 +17,7 @@ class V1::UserRegistrationsController < Devise::RegistrationsController
       return
     end
     
-    @useremail = User.find_by_email(email.downcase)
+    @useremail = User.find_by_email(email)
 
     unless @useremail.nil?
       render json: {:message => "Email address already registered."}, status: 401

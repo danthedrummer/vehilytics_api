@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'User Registrations API', type: :request do
   
   describe 'POST /users' do
+    let!(:user) { create(:user) }
     let(:valid_attributes) { { user: { email: Faker::Internet.unique.email, 
       password: "password", password_confirmation: "password" } } }
     
@@ -18,9 +19,11 @@ RSpec.describe 'User Registrations API', type: :request do
       end
     end
     
+    let(:duplicate_email) { { user: { email: user.email,
+      password: "password", password_confirmation: "password" } } }
+    
     context 'when the email is already registered' do
-      before { post '/users', params: valid_attributes }
-      before { post '/users', params: valid_attributes }
+      before { post '/users', params: duplicate_email }
       
       it 'returns a validation failure message' do
         expect(response.body).to match(/Email address already registered./)

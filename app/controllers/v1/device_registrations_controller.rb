@@ -18,14 +18,14 @@ class V1::DeviceRegistrationsController < ApplicationController
       return
     end
     
-    @device_email = Device.find_by_email(email.downcase)
+    @device_email = Device.find_by_email(email)
 
     unless @device_email.nil?
       render json: {:message => "Email address already registered."}, status: 401
       return
     end
     
-    @device_name = Device.find_by_device_name(device_name.downcase)
+    @device_name = Device.find_by_device_name(device_name)
     
     unless @device_name.nil?
       render json: {:message => "Device name already registered."}, status: 401

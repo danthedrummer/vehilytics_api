@@ -7,4 +7,7 @@ class User < ApplicationRecord
          
   has_one :device
   has_and_belongs_to_many :sensors
+  
+  validates_presence_of :email
+  validates_uniqueness_of :email, :case_sensitive => false
 end
