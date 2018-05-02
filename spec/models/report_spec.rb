@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Report, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to(:device) }
+  it { should have_many(:readings) }
+  
+  it { should validate_presence_of(:time_reported) }
 end

@@ -8,4 +8,7 @@ class Device < ApplicationRecord
   belongs_to :user, optional: true
   has_many :reports
   has_and_belongs_to_many :sensors
+  
+  validates_presence_of :email, :device_name
+  validates_uniqueness_of :email, :device_name
 end
