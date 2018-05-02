@@ -18,7 +18,10 @@ RSpec.describe 'Device Registrations API', type: :request do
       end
     end
     
-    let!(:device) { create(:device) }
+    let!(:device) { 
+      Faker::StarWars.unique.clear
+      create(:device) 
+    }
     
     let(:duplicate_email) { { device: { email: device.email, 
       device_name: Faker::StarWars.unique.droid, password: "password", password_confirmation: "password" } } }

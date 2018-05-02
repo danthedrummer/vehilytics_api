@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :sensor do
-    name { Faker::Space.unique.galaxy }
-    shortname { Faker::Space.unique.planet }
+    sequence(:name) {|n| Faker::Pokemon.name + " (#{n})" }
+    sequence(:shortname) {|n| Faker::Pokemon.location + " (#{n})" }
     unit { "%" }
   end
 end

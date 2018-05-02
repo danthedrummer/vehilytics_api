@@ -16,6 +16,11 @@ class V1::DeviceSessionsController < ApplicationController
   end
   
   def destroy
+    if current_device == nil
+      head(:unauthorized)
+      return
+    end
+    
     current_device&.authentication_token = nil
     if current_device.save
       head(:ok)

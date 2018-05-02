@@ -1,10 +1,12 @@
 class V1::ReadingsController < ApplicationController
   
   def index
+    
     if current_user == nil
       head(:unauthorized)
       return
     end
+    
     
     if params.has_key?(:sensor)
       sensor = Sensor.find_by_shortname(params[:sensor])

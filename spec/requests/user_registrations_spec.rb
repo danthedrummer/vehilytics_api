@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'User Registrations API', type: :request do
+  before { Faker::UniqueGenerator.clear }
   
   describe 'POST /users' do
     let!(:user) { create(:user) }

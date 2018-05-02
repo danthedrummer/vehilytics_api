@@ -1,16 +1,5 @@
 class V1::ReportsController < ApplicationController
   
-  # GET all reports for current user
-  # Intended for the client to use
-  def index
-    if current_user == nil
-      head(:unauthorized)
-      return 
-    end
-    
-    @reports = current_user.device.reports
-  end
-  
   # Create a new report w/ readings for a given device
   # Intended for the diagnostic reader to use
   def create 
@@ -20,10 +9,23 @@ class V1::ReportsController < ApplicationController
       return 
     end
     
+    if !params.has_key?('time_reported') || !params.has_key?('device_name') || !params.has_key?('readings')
+      head(400)
+      return
+    end
+    
+    params['readings'].each do |reading|
+      if !reading.has_key?('shortname') || !reading.has_key?('value')
+        head(400)
+        return
+      end
+    end
+    
     @report = Report.new(report_params)
-    puts @report
     @report.device = current_device
     @report.save
+    
+    current_device.reports << @report
     
     reading_params[:readings].each do |reading|
       r = Reading.new
@@ -36,7 +38,7 @@ class V1::ReportsController < ApplicationController
     
     result = {:time_reported => @report.time_reported, :readings => []}
     @report.readings.each do |r|
-      result[:readings] << {:sensor => r.sensor.shortname, :value => r.value}
+      result[:readings] << {:shortname => r.sensor.shortname, :value => r.value}
     end
     render json: result, status: :created
   end

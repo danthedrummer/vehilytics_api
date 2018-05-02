@@ -1,7 +1,5 @@
 FactoryBot.define do
-  factory :readings do
+  factory :reading do
     value { "#{rand(100)}" }
-    report
-    sensor
   end
 end

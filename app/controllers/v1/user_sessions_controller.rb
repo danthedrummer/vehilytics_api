@@ -18,6 +18,11 @@ class V1::UserSessionsController < ApplicationController
   
   # Signing out
   def destroy
+    if current_user == nil
+      head(:unauthorized)
+      return
+    end
+    
     current_user&.authentication_token = nil
     if current_user.save
       head(:ok)
