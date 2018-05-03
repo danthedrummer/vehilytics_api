@@ -1,8 +1,20 @@
 class V1::DevicesController < ApplicationController
   
+  def index
+    if current_user == nil
+      head(:unauthorized)
+      return
+    end
+    
+    if current_user.device != nil
+      render json: current_user.device.as_json(only: [:device_name, :email]), status: :ok
+    else
+      render json: {:message => "No device attached to user"}, status: 400
+    end
+  end
+  
   # Attach a device to a user
   def create
-    
     if current_user == nil
       head(:unauthorized)
       return

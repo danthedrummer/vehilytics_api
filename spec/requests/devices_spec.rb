@@ -2,6 +2,27 @@ require 'rails_helper'
 
 RSpec.describe 'Devices API', type: :request do
   
+  describe 'GET /v1/devices' do
+    let!(:user) { create(:user) }
+    let!(:device) { create(:device) }
+    let(:valid_headers) { { 'X-User-Email' => user.email, 'X-User-Token' => user.authentication_token } }
+    
+    context 'when the user has an attached device' do
+      before { 
+        user.device = device
+        get '/v1/devices', headers: valid_headers 
+      }
+      
+      it 'returns a status code 200' do
+        expect(response).to have_http_status(200)
+      end
+      
+      it 'returns the device info' do
+        expect(json).to eq(obj_to_json_hash(device.as_json(only: [:device_name, :email])))
+      end
+    end
+  end
+  
   describe 'POST /v1/devices' do
     let!(:user) { create(:user) }
     let!(:device) { create(:device) }
