@@ -37,6 +37,18 @@ RSpec.describe 'Sensors API', type: :request do
         expect(json).to eq(obj_to_json_hash(device.user.sensors))
       end
     end
+    
+    context 'when all sensors are requested' do
+      before { get '/v1/sensors', params: { 'list' => "yes" } }
+      
+      it 'returns a list of every sensor' do
+        expect(json).to eq(obj_to_json_hash(sensors))
+      end
+      
+      it 'returns a status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
       
     context 'when no valid token submitted' do
       before { get '/v1/sensors' }
