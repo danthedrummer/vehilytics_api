@@ -22,14 +22,49 @@ class V1::DevicesController < ApplicationController
     
     device_name = params[:device_name]
     
-    if device_name == nil
-      head(400)
-      return 
+    if device_name != nil && params.has_key?('function')
+      if params['function'] == 'attach'
+        current_user.device = Device.find_by_device_name(device_name)
+        render json: current_user.device.as_json(only: [:device_name, :email]), status: :created
+        return
+      elsif params['function'] == 'detach'
+        if current_user.device != nil && current_user.device.device_name == device_name
+          current_user.device = nil
+          current_user.save!
+          head(200)
+          return
+        end
+      end
     end
     
-    current_user.device = Device.find_by_device_name(device_name)
+    head(400)
+    return
     
-    render json: current_user.device.as_json(only: [:device_name, :email]), status: :created
+  end
+  
+  # Detach a device from a user
+  def destroy
+    if current_user == nil
+      head(:unauthorized)
+      return
+    end
+    
+    device_name = params[:device_name]
+    
+    if device_name == nil
+      head(400)
+      return
+    end
+    
+    device = Device.find_by_device_name(device_name)
+    
+    if current_user.device != device
+      head(400)
+      return
+    end
+    
+    current_user.device = nil
+    head(200)
   end
   
 end
