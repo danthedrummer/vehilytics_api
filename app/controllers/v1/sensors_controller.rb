@@ -4,9 +4,12 @@ class V1::SensorsController < ApplicationController
   # User: Get all sensors with available readings
   # Device: Get all sensors that should be reported
   def index
-    
     if current_user != nil && current_device == nil
-      @sensors = current_user.device.sensors
+      if params.has_key?('user_filter') 
+        @sensors = current_user.sensors
+      else
+        @sensors = current_user.device.sensors
+      end
     elsif current_device != nil && current_user == nil
       @sensors = current_device.user.sensors 
     else
@@ -37,11 +40,12 @@ class V1::SensorsController < ApplicationController
     end
     
     if params.has_key?('sensors')
-      sensor_list = []
-      params['sensors'].each do |sensor_shortname|
-        sensor_list << Sensor.find_by_shortname(sensor_shortname)
+      sensor_list = params['sensors'] != nil ? params['sensors'] : []
+      new_sensors = []
+      sensor_list.each do |sensor_shortname|
+        new_sensors << Sensor.find_by_shortname(sensor_shortname)
       end
-      current_user.sensors = sensor_list
+      current_user.sensors = new_sensors
       head(:created)
     else
       head(400)
