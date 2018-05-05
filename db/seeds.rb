@@ -6,7 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 #
-# Service.create(name: "X-ray", description: "X-ray services")
 
 # sensor = Sensor.create(name: "Battery Voltage", shortname: "battery", unit: "Volts")
 # device = Device.create(device_name: "TEST_123")
@@ -62,33 +61,109 @@ Sensor.create(name: "Engine oil temperature", shortname: "oil_temp", unit: "C")
 # Sensor.create(name: "Fuel injection timing", shortname: "fuel_inject_timing", unit: "degrees")
 Sensor.create(name: "Engine fuel rate", shortname: "fuel_rate", unit: "L/h")
 
-# Seeding users
-dan = User.create(email: "dan@example.com", password: "password", password_confirmation: "password")
-paul = User.create(email: "paul@example.com", password: "password", password_confirmation: "password")
-
 # Seeding devices
-Device.create(email: "device_test_123@vehilytics.com", device_name: "TEST_123", user: dan, password: "device_pass", password_confirmation: "device_pass")
-Device.create(email: "device_test_789@vehilytics.com", device_name: "TEST_789", user: paul, password: "device_pass", password_confirmation: "device_pass")
+(0..10).each do |x|
+  Device.create(email: "device_test_#{x}@vehilytics.com", device_name: "TEST_#{x}", password: "device_pass", password_confirmation: "device_pass")
+end
 
-fuel_sensor = Sensor.find_by_shortname("fuel_level")
-battery_sensor = Sensor.find_by_shortname("control_module_voltage")
-air_temp_sensor = Sensor.find_by_shortname("ambient_air_temp")
+# Seeding users
+dan = User.create(email: "dan@example.com", password: "password", password_confirmation: "password", device: Device.find(1))
+paul = User.create(email: "paul@example.com", password: "password", password_confirmation: "password", device: Device.find(2))
 
-dan.sensors << fuel_sensor << battery_sensor
-paul.sensors << fuel_sensor << air_temp_sensor
+@fuel_sensor = Sensor.find_by_shortname("fuel_level")
+@battery_sensor = Sensor.find_by_shortname("control_module_voltage")
+@air_temp_sensor = Sensor.find_by_shortname("ambient_air_temp")
+@coolant_temp_sensor = Sensor.find_by_shortname("temp")
+
+dan.sensors << @fuel_sensor << @battery_sensor << @coolant_temp_sensor
+paul.sensors << @fuel_sensor << @air_temp_sensor
+
+def generate_reports(user)
+  reports = []
+  days = 1 
+  hours = 13
+  minutes = 0
+  (0..100).each do
+    reports << Report.create(device: user.device, time_reported: Time.new(2018, 5, days, hours, minutes))
+    minutes += 10
+    if minutes == 60
+      minutes = 0
+      hours += 1
+    end
+    if hours == 15
+      hours = 17
+    elsif hours == 18
+      hours = 13
+      days += 1
+    end
+  end
+end
+
+def generate_fuel_level_readings(reports)
+  fuel_level = 60
+  reports.each do |report|
+    Reading.create(sensor: @fuel_sensor, value: fuel_level.to_s, report: report)
+    fuel_level -= 5
+    if fuel_level == 15
+      fuel_level = 60
+    end
+  end
+end
+
+def generate_battery_level_readings(reports)
+  battery_level = 12.7
+  reports.each do |report|
+    Reading.create(sensor: @battery_sensor, value: sprintf('%.2f', battery_level), report: report)
+    if rand() < 0.5
+      battery_level = 12.7 - (rand()/2)
+    else
+      battery_level = 12.7 + (rand()/2)
+    end
+  end
+end
+
+def generate_coolant_temp_readings(reports)
+  coolant_temp = 30.0
+  hour = 13
+  reports.each do |report|
+    if report.time_reported.hour - hour > 1
+      coolant_temp = 30.0
+    end
+    Reading.create(sensor: @coolant_temp_sensor, value: sprintf('%.2f', coolant_temp), report: report)
+    coolant_temp += rand()*10
+    hour = report.time_reported.hour
+  end
+end
+
+def generate_air_temp_readings(reports)
+  air_temp = 15
+  hour = 13
+  reports.each do |report|
+    if report.time_reported.hour - hour > 1
+      air_temp = report.time_reported.hour >= 17 ? 10 : 15
+    end
+    Reading.create(sensor: @air_temp_sensor, value: sprintf('%.2f', air_temp), report: report)
+    air_temp += rand() > 0.5 ? (rand()*1) : (rand()*-1)
+    hour = report.time_reported.hour
+  end
+end
 
 # Seeding reports for dan
-rep = Report.create(device: dan.device, time_reported: Time.now)
+generate_reports(dan)
 
-Reading.create(sensor: fuel_sensor, value: "40", report: rep)
-dan.device.sensors << fuel_sensor
-Reading.create(sensor: battery_sensor, value: "12.5", report: rep)
-dan.device.sensors << battery_sensor
+generate_fuel_level_readings(dan.device.reports)
+generate_battery_level_readings(dan.device.reports)
+generate_coolant_temp_readings(dan.device.reports)
+
+dan.device.sensors << @fuel_sensor
+dan.device.sensors << @battery_sensor
+dan.device.sensors << @coolant_temp_sensor
 
 # Seeding reports for paul
-rep = Report.create(device: paul.device, time_reported: Time.now)
+generate_reports(paul)
 
-Reading.create(sensor: fuel_sensor, value: "60", report: rep)
-paul.device.sensors << fuel_sensor
-Reading.create(sensor: air_temp_sensor, value: "9.3", report: rep)
-paul.device.sensors << air_temp_sensor
+generate_fuel_level_readings(paul.device.reports)
+generate_air_temp_readings(paul.device.reports)
+
+paul.device.sensors << @fuel_sensor
+paul.device.sensors << @air_temp_sensor
