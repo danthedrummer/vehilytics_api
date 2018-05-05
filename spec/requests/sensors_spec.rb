@@ -21,7 +21,9 @@ RSpec.describe 'Sensors API', type: :request do
       end
 
       it 'returns all of the sensors reported by their device' do
-        expect(json).to eq(obj_to_json_hash(user.device.sensors))
+        expected = {'sensors'=>obj_to_json_hash(user.device.sensors), 
+          'warnings'=>[], 'errors'=>[]}
+        expect(json).to eq(expected)
       end
     end
     

@@ -8,7 +8,10 @@ class V1::SensorsController < ApplicationController
       if params.has_key?('user_filter') 
         @sensors = current_user.sensors
       else
-        @sensors = current_user.device.sensors
+        @sensors = {}
+        @sensors['sensors'] = current_user.device.sensors
+        @sensors['warnings'] = []
+        @sensors['errors'] = []
       end
     elsif current_device != nil && current_user == nil
       @sensors = current_device.user.sensors 
