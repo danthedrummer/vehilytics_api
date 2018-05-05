@@ -62,6 +62,15 @@ RSpec.describe 'Sensors API', type: :request do
         expect(response).to have_http_status(200)
       end
     end
+    
+    context 'when the authentication is invalid' do
+      before { get '/v1/sensors', headers: { 'X-User-Email' => user.email,
+        'X-User-Token' => device.authentication_token } }
+        
+        it 'returns a status code 401' do
+          expect(response).to have_http_status(401)
+        end
+    end
   end
   
   describe 'POST /v1/sensors' do

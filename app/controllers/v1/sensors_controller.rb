@@ -12,6 +12,10 @@ class V1::SensorsController < ApplicationController
       end
     elsif current_device != nil && current_user == nil
       @sensors = current_device.user.sensors 
+    elsif params.has_key?('user_token') || params.has_key?('user_email') || 
+            params.has_key?('device_email') || params.has_key?('device_token') 
+      head(:unauthorized)
+      return
     else
       @sensors = Sensor.all
     end
