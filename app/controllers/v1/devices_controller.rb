@@ -24,9 +24,15 @@ class V1::DevicesController < ApplicationController
     
     if device_name != nil && params.has_key?('function')
       if params['function'] == 'attach'
-        current_user.device = Device.find_by_device_name(device_name)
-        render json: current_user.device.as_json(only: [:device_name, :email]), status: :created
-        return
+        device  = Device.find_by_device_name(device_name)
+        if device == nil
+          render json: { "message": "Device does not exist" }, status: 400
+          return
+        else
+          current_user.device = device
+          render json: current_user.device.as_json(only: [:device_name, :email]), status: :created
+          return
+        end
       elsif params['function'] == 'detach'
         if current_user.device != nil && current_user.device.device_name == device_name
           current_user.device = nil
