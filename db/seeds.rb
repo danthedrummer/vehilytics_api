@@ -57,13 +57,13 @@ Sensor.create(name: "Engine oil temperature", shortname: "oil_temp", unit: "C")
 Sensor.create(name: "Engine fuel rate", shortname: "fuel_rate", unit: "L/h")
 
 # Seeding reminders
-Reminder.create("Check Tyres", 4, "Check the pressure in your tyres and the amount of tread.")
-Reminder.create("Check Fluids", 26, "Check the engine coolant, transmission fluid, and brake fluid. Watch the level and cleanliness of the fluid.")
-Reminder.create("Check Battery", 13, "Check the current charge level of the battery and clean the contacts if necessary.")
-Reminder.create("Change Engine Air Filter", 52, "Change the engine air filter if it is dirty. This may not be necessary if the car is not driven often.")
-Reminder.create("Have Tyres Balanced", 26, "Have your tyres balanced and rotated to increase the life of your tyres.")
-Reminder.create("Change Spark Plugs", 156, "Change out your spark plugs to improve the efficiency of your engine.")
-Reminder.create("Inspect Timing Belts", 208, "Have the timing and serpentine belts inspected and replaced if necessary.")
+Reminder.create(title: "Check Tyres", weekly_frequency: 4, description: "Check the pressure in your tyres and the amount of tread.")
+Reminder.create(title: "Check Fluids", weekly_frequency: 26, description: "Check the engine coolant, transmission fluid, and brake fluid. Watch the level and cleanliness of the fluid.")
+Reminder.create(title: "Check Battery", weekly_frequency: 13, description: "Check the current charge level of the battery and clean the contacts if necessary.")
+Reminder.create(title: "Change Engine Air Filter", weekly_frequency: 52, description: "Change the engine air filter if it is dirty. This may not be necessary if the car is not driven often.")
+Reminder.create(title: "Have Tyres Balanced", weekly_frequency: 26, description: "Have your tyres balanced and rotated to increase the life of your tyres.")
+Reminder.create(title: "Change Spark Plugs", weekly_frequency: 156, description: "Change out your spark plugs to improve the efficiency of your engine.")
+Reminder.create(title: "Inspect Timing Belts", weekly_frequency: 208, description: "Have the timing and serpentine belts inspected and replaced if necessary.")
 
 # Seeding devices
 (0..10).each do |x|
