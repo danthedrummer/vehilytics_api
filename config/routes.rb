@@ -8,6 +8,6 @@ Rails.application.routes.draw do
     resources :reports, only: [:create]
     resources :readings, only: [:index]
     resources :devices, only: [:create, :index]
-    
+    resources :reminders, only: [:index]
   end
 end

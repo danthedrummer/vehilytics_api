@@ -7,11 +7,6 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 #
 
-# sensor = Sensor.create(name: "Battery Voltage", shortname: "battery", unit: "Volts")
-# device = Device.create(device_name: "TEST_123")
-# report = Report.create(time_reported: Time.now, device: device)
-# Reading.create(value: 12.5, sensor: sensor, report: report)
-
 # Creating sensors
 # Sensor.create(name: "", shortname: "", unit: "")
 # Sensor.create(name: "Calculated Load Value", shortname: "load", unit: "%")
@@ -60,6 +55,15 @@ Sensor.create(name: "Absolute Vapor Pres", shortname: "evap_vapor_pressure_abs",
 Sensor.create(name: "Engine oil temperature", shortname: "oil_temp", unit: "C")
 # Sensor.create(name: "Fuel injection timing", shortname: "fuel_inject_timing", unit: "degrees")
 Sensor.create(name: "Engine fuel rate", shortname: "fuel_rate", unit: "L/h")
+
+# Seeding reminders
+Reminder.create("Check Tyres", 4, "Check the pressure in your tyres and the amount of tread.")
+Reminder.create("Check Fluids", 26, "Check the engine coolant, transmission fluid, and brake fluid. Watch the level and cleanliness of the fluid.")
+Reminder.create("Check Battery", 13, "Check the current charge level of the battery and clean the contacts if necessary.")
+Reminder.create("Change Engine Air Filter", 52, "Change the engine air filter if it is dirty. This may not be necessary if the car is not driven often.")
+Reminder.create("Have Tyres Balanced", 26, "Have your tyres balanced and rotated to increase the life of your tyres.")
+Reminder.create("Change Spark Plugs", 156, "Change out your spark plugs to improve the efficiency of your engine.")
+Reminder.create("Inspect Timing Belts", 208, "Have the timing and serpentine belts inspected and replaced if necessary.")
 
 # Seeding devices
 (0..10).each do |x|
