@@ -27,6 +27,11 @@ class V1::ReadingsController < ApplicationController
         :time_reported => reading.report.time_reported}
     end
     
-    render json: {:readings => result}, status: :ok
+    if sensor != nil
+      render json: {:readings => result, :upper_range => sensor.sensor_description.upper_range, 
+        :lower_range => sensor.sensor_description.lower_range}, status: :ok
+    else
+      render json: {:readings => result}, status: :ok
+    end
   end
 end

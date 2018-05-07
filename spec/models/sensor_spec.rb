@@ -4,6 +4,7 @@ RSpec.describe Sensor, type: :model do
   it { should have_many(:readings) }
   it { should have_and_belong_to_many(:devices) }
   it { should have_and_belong_to_many(:users) }
+  it { should have_one(:sensor_description) }
   
   it { should validate_presence_of(:name) }
   it { should validate_presence_of(:shortname) }

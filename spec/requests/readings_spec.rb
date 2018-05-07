@@ -15,7 +15,11 @@ RSpec.describe 'Readings API', type: :request do
       report.save
       readings.each do |reading|
         reading.report = report
-        reading.sensor = create(:sensor)
+        s = create(:sensor)
+        d = build(:sensor_description)
+        d.sensor = s
+        d.save
+        reading.sensor = s
         reading.save
       end
     }

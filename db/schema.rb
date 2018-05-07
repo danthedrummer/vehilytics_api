@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180506112908) do
+ActiveRecord::Schema.define(version: 20180507112425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,16 @@ ActiveRecord::Schema.define(version: 20180506112908) do
     t.index ["device_id"], name: "index_reports_on_device_id"
   end
 
+  create_table "sensor_descriptions", force: :cascade do |t|
+    t.text "info", null: false
+    t.decimal "upper_range"
+    t.decimal "lower_range"
+    t.bigint "sensor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sensor_id"], name: "index_sensor_descriptions_on_sensor_id"
+  end
+
   create_table "sensors", force: :cascade do |t|
     t.string "name", null: false
     t.string "shortname", null: false
@@ -96,4 +106,5 @@ ActiveRecord::Schema.define(version: 20180506112908) do
   add_foreign_key "readings", "reports"
   add_foreign_key "readings", "sensors"
   add_foreign_key "reports", "devices"
+  add_foreign_key "sensor_descriptions", "sensors"
 end
