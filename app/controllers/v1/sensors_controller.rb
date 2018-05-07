@@ -15,7 +15,7 @@ class V1::SensorsController < ApplicationController
         @sensors['sensors'].each do |sensor|
           problem = 0
           sensor.readings.last(30).each do |reading|
-            if reading.value > sensor.sensor_description.upper_range || reading.value < sensor.sensor_description.lower_range
+            if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
               problem += 1
             end
             if problem > 15
