@@ -12,6 +12,21 @@ class V1::SensorsController < ApplicationController
         @sensors['sensors'] = current_user.device.sensors
         @sensors['warnings'] = []
         @sensors['errors'] = []
+        @sensors['sensors'].each do |sensor|
+          problem = 0
+          sensor.readings.last(30).each do |reading|
+            if reading.value > sensor.sensor_description.upper_range || reading.value < sensor.sensor_description.lower_range
+              problem += 1
+            end
+            if problem > 15
+              errors << sensor.shortname
+              break
+            end
+          end
+          if problem > 0
+            warnings << sensor.shortname
+          end
+        end
       end
     elsif current_device != nil && current_user == nil
       @sensors = current_device.user.sensors 

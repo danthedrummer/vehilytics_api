@@ -14,7 +14,7 @@ class V1::ReadingsController < ApplicationController
     
     retrieved_readings = []
     current_user.device.reports.each do |report|
-      if params.has_key?(:sensor)
+      if sensor != nil
         retrieved_readings.concat(report.readings.where(sensor: sensor))
       else
         retrieved_readings.concat(report.readings)
