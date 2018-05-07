@@ -19,12 +19,12 @@ class V1::SensorsController < ApplicationController
               problem += 1
             end
             if problem > 15
-              errors << sensor.shortname
+              @sensors['errors'] << sensor.shortname
               break
             end
           end
           if problem > 0
-            warnings << sensor.shortname
+            @sensors['warnings'] << sensor.shortname
           end
         end
       end
