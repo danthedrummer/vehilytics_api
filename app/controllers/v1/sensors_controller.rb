@@ -13,18 +13,16 @@ class V1::SensorsController < ApplicationController
         @sensors['warnings'] = []
         @sensors['errors'] = []
         @sensors['sensors'].each do |sensor|
-          problem = 0
-          sensor.readings.last(30).each do |reading|
-            if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
-              problem += 1
-            end
-            if problem > 15
-              @sensors['errors'] << sensor.shortname
-              break
-            end
-          end
-          if problem > 0
-            @sensors['warnings'] << sensor.shortname
+          puts sensor.shortname
+          puts sensor.sensor_description
+          if sensor.sensor_description.upper_range == nil || sensor.sensor_description.lower_range == nil
+            next
+          elsif sensor.sensor_description.upper_range == nil
+            analyse_readings_no_upper(sensor)
+          elsif sensor.sensor_description.lower_range == nil
+            analyse_readings_no_lower(sensor)
+          else
+            analyse_readings(sensor)
           end
         end
       end
@@ -73,5 +71,55 @@ class V1::SensorsController < ApplicationController
       head(400)
     end
   end
+  
+  private 
+  
+    def analyse_readings(sensor)
+      problem = 0
+      sensor.readings.last(30).each do |reading|
+        if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
+          problem += 1
+        end
+        if problem > 15
+          @sensors['errors'] << sensor.shortname
+          break
+        end
+      end
+      if problem > 0
+        @sensors['warnings'] << sensor.shortname
+      end
+    end
+    
+    def analyse_readings_no_upper(sensor)
+      problem = 0
+      sensor.readings.last(30).each do |reading|
+        if reading.value.to_f < sensor.sensor_description.lower_range
+          problem += 1
+        end
+        if problem > 15
+          @sensors['errors'] << sensor.shortname
+          break
+        end
+      end
+      if problem > 0
+        @sensors['warnings'] << sensor.shortname
+      end
+    end
+    
+    def analyse_readings_no_lower(sensor)
+      problem = 0
+      sensor.readings.last(30).each do |reading|
+        if reading.value.to_f > sensor.sensor_description.upper_range
+          problem += 1
+        end
+        if problem > 15
+          @sensors['errors'] << sensor.shortname
+          break
+        end
+      end
+      if problem > 0
+        @sensors['warnings'] << sensor.shortname
+      end
+    end
   
 end

@@ -7,6 +7,11 @@ RSpec.describe 'Sensors API', type: :request do
     let!(:user) { create(:user) }
     let!(:device) { create(:device) }
     before { 
+      sensors.each do |sensor|
+        description = build(:sensor_description)
+        description.sensor = sensor
+        description.save
+      end
       user.sensors << sensors[0] << sensors[2]
       user.device = device
       device.sensors << sensors[1] << sensors[3]
