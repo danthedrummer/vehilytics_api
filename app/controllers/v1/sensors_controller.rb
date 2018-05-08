@@ -74,7 +74,7 @@ class V1::SensorsController < ApplicationController
   
     def analyse_readings(sensor)
       problem = 0
-      sensor.readings.last(30).each do |reading|
+      sensor.readings.last(50).each do |reading|
         if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
@@ -90,7 +90,7 @@ class V1::SensorsController < ApplicationController
     
     def analyse_readings_no_upper(sensor)
       problem = 0
-      sensor.readings.last(30).each do |reading|
+      sensor.readings.last(50).each do |reading|
         if reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
@@ -106,7 +106,7 @@ class V1::SensorsController < ApplicationController
     
     def analyse_readings_no_lower(sensor)
       problem = 0
-      sensor.readings.last(30).each do |reading|
+      sensor.readings.last(50).each do |reading|
         if reading.value.to_f > sensor.sensor_description.upper_range
           problem += 1
         end
