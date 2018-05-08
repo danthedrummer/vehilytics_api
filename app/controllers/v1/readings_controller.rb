@@ -19,6 +19,9 @@ class V1::ReadingsController < ApplicationController
       else
         retrieved_readings.concat(report.readings)
       end
+      if retrieved_readings.size == 60
+        break
+      end
     end
     
     result = []

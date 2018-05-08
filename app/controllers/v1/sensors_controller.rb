@@ -13,8 +13,6 @@ class V1::SensorsController < ApplicationController
         @sensors['warnings'] = []
         @sensors['errors'] = []
         @sensors['sensors'].each do |sensor|
-          puts sensor.shortname
-          puts sensor.sensor_description
           if sensor.sensor_description.upper_range == nil || sensor.sensor_description.lower_range == nil
             next
           elsif sensor.sensor_description.upper_range == nil
