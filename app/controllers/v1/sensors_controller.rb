@@ -78,7 +78,7 @@ class V1::SensorsController < ApplicationController
         if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
-        if problem > 15
+        if problem > 10
           @sensors['errors'] << sensor.shortname
           break
         end
@@ -94,7 +94,7 @@ class V1::SensorsController < ApplicationController
         if reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
-        if problem > 15
+        if problem > 10
           @sensors['errors'] << sensor.shortname
           break
         end
@@ -110,7 +110,7 @@ class V1::SensorsController < ApplicationController
         if reading.value.to_f > sensor.sensor_description.upper_range
           problem += 1
         end
-        if problem > 15
+        if problem > 10
           @sensors['errors'] << sensor.shortname
           break
         end
