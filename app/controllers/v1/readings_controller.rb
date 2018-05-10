@@ -13,7 +13,7 @@ class V1::ReadingsController < ApplicationController
     end
     
     retrieved_readings = []
-    current_user.device.reports.each do |report|
+    current_user.device.reports.reverse.each do |report|
       if sensor != nil
         retrieved_readings.concat(report.readings.where(sensor: sensor))
       else
@@ -25,7 +25,7 @@ class V1::ReadingsController < ApplicationController
     end
     
     result = []
-    retrieved_readings.each do |reading|
+    retrieved_readings.reverse.each do |reading|
       result << {:sensor => reading.sensor.shortname, :value => reading.value, 
         :time_reported => reading.report.time_reported}
     end
