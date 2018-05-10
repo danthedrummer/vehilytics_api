@@ -27,6 +27,7 @@ class V1::ReportsController < ApplicationController
     
     current_device.reports << @report
     
+    problem_sensors = []
     reading_params[:readings].each do |reading|
       r = Reading.new
       r.value = reading[:value]
@@ -34,6 +35,24 @@ class V1::ReportsController < ApplicationController
       attach_sensor_to_device(r.sensor, current_device)
       r.report = @report
       r.save
+      
+      upper_range = r.sensor.sensor_description.upper_range
+      lower_range = r.sensor.sensor_description.lower_range
+      if upper_range != nil && r.value.to_f > upper_range
+        problem_sensors << reading[:shortname]
+      elsif lower_range != nil && r.value.to_f < lower_range
+        problem_sensors << reading[:shortname]
+      end
+    end
+    
+    if problem_sensors.length > 0
+      notification = Rpush::Gcm::Notification.new
+      notification.app = Rpush::Gcm::App.find_by_name("Vehilytics")
+      notification.registration_ids = [current_device.user.firebase_token]
+      notification.data = { "title": "New report", "body": "Problems detected for #{problem_sensors}" }
+      notification.save!
+      
+      Rpush.push
     end
     
     result = {:time_reported => @report.time_reported, :readings => []}

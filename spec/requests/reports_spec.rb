@@ -10,6 +10,11 @@ RSpec.describe 'Reports API', type: :request do
     let!(:gathered_data) { [] }
     let!(:time) { Time.now }
     before {
+      sensors.each do |s|
+        d = build(:sensor_description)
+        d.sensor = s
+        d.save!
+      end
       user.device = device
     }
     

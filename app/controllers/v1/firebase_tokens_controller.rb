@@ -12,8 +12,21 @@ class V1::FirebaseTokensController < ApplicationController
     end
     
     current_user.firebase_token = params["firebase_token"]
-    render json: { "message": "Storing token: #{current_user.firebase_token}" }, status: :created
-    return
+    current_user.save!
+
+    head(201)
+  end
+  
+  def destroy
+    if current_user != nil
+      head(:unauthorized)
+      return
+    end
+    
+    current_user.firebase_token = nil
+    current_user.save!
+    
+    head(200)
   end
   
 end
