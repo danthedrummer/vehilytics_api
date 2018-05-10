@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     resources :readings, only: [:index]
     resources :devices, only: [:create, :index]
     resources :reminders, only: [:index]
+    resources :firebase_tokens, only: [:create]
   end
 end
