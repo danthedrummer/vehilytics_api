@@ -49,7 +49,7 @@ class V1::ReportsController < ApplicationController
       notification = Rpush::Gcm::Notification.new
       notification.app = Rpush::Gcm::App.find_by_name("Vehilytics")
       notification.registration_ids = [current_device.user.firebase_token]
-      notification.data = { "title": "New report", "body": "Problems detected for #{problem_sensors}" }
+      notification.data = { "title": "Problem Detected", "body": "#{current_device.device_name} has detected a possible issue" }
       notification.save!
       
       Rpush.push
