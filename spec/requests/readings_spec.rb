@@ -36,7 +36,7 @@ RSpec.describe 'Readings API', type: :request do
         readings.each do |r|
           expected << {'sensor' => r.sensor.shortname, 'value' => r.value, 'time_reported' => r.report.time_reported}
         end
-        expect(json['readings']).to eq(obj_to_json_hash(expected))
+        expect(json['readings']).to eq(obj_to_json_hash(expected.reverse))
       end
     end
     
