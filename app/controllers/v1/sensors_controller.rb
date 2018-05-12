@@ -74,12 +74,21 @@ class V1::SensorsController < ApplicationController
   
     def analyse_readings(sensor)
       problem = 0
-      sensor.readings.last(50).each do |reading|
+      readings = []
+      current_user.device.reports.each do |report|
+        report.readings.each do |reading|
+          if  reading.sensor == sensor
+            readings << reading
+          end
+        end
+      end
+      readings.last(50).each do |reading|
         if reading.value.to_f > sensor.sensor_description.upper_range || reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
         if problem > 10
           @sensors['errors'] << sensor.shortname
+          @sensors['warnings'] -= [sensor.shortname]
           break
         end
       end
@@ -90,7 +99,15 @@ class V1::SensorsController < ApplicationController
     
     def analyse_readings_no_upper(sensor)
       problem = 0
-      sensor.readings.last(50).each do |reading|
+      readings = []
+      current_user.device.reports.each do |report|
+        report.readings.each do |reading|
+          if  reading.sensor == sensor
+            readings << reading
+          end
+        end
+      end
+      readings.last(50).each do |reading|
         if reading.value.to_f < sensor.sensor_description.lower_range
           problem += 1
         end
@@ -106,7 +123,15 @@ class V1::SensorsController < ApplicationController
     
     def analyse_readings_no_lower(sensor)
       problem = 0
-      sensor.readings.last(50).each do |reading|
+      readings = []
+      current_user.device.reports.each do |report|
+        report.readings.each do |reading|
+          if  reading.sensor == sensor
+            readings << reading
+          end
+        end
+      end
+      readings.last(50).each do |reading|
         if reading.value.to_f > sensor.sensor_description.upper_range
           problem += 1
         end
